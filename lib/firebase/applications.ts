@@ -166,9 +166,9 @@ export async function getApplicationsForOpportunity(
           ...application,
           volunteer: {
             name: volunteerData.name,
-            city: volunteerData.location.city,
+            city: volunteerData.location?.city || '',
             skills: volunteerData.skills || [],
-            avatar: volunteerData.avatar,
+            avatar: volunteerData.avatar || undefined,
           },
         });
       }

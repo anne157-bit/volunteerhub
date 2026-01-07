@@ -33,7 +33,7 @@ export default function NGOOnboardingPage() {
     impactAreas: [],
     website: '',
     registrationNumber: '',
-    foundedYear: null,
+    foundedYear: undefined,
     location: {
       city: '',
       state: '',
@@ -87,7 +87,7 @@ export default function NGOOnboardingPage() {
     } else if (name === 'foundedYear') {
       setFormData((prev) => ({
         ...prev,
-        [name]: value ? Number(value) : null,
+        [name]: value ? Number(value) : undefined,
       }));
     } else {
       setFormData((prev) => ({

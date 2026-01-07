@@ -41,7 +41,7 @@ export interface VolunteerAvailability {
 export interface VolunteerStats {
   totalHours: number;
   eventsAttended: number;
-  eventsCompleted: number;
+  eventsCompleted?: number;
   badges: string[];
   currentStreak: number;
   longestStreak: number;
@@ -139,6 +139,8 @@ export interface NGOStats {
   totalHours: number;
   avgRating: number;
   fillRate: number;
+  eventsCompleted?: number;
+  currentStreak?: number;
 }
 
 /**
@@ -166,6 +168,10 @@ export interface NGO extends User {
   verification: NGOVerification;
   stats: NGOStats;
   socialMedia?: NGOSocialMedia | null;
+  skills?: string[];
+  causes?: string[];
+  availability?: VolunteerAvailability;
+  commitment?: 'One-time' | 'Short-term' | 'Long-term' | null;
 }
 
 /**

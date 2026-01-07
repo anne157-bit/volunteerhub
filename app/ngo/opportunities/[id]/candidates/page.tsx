@@ -9,7 +9,8 @@ import { getOpportunityById } from '@/lib/firebase/opportunities';
 import { getApplicationsForOpportunity, updateApplicationStatus } from '@/lib/firebase/applications';
 import type { Opportunity } from '@/types/opportunity';
 import type { NGO } from '@/types/user';
-import type { ApplicationWithVolunteer, ApplicationStatus } from '@/lib/firebase/applications';
+import type { ApplicationWithVolunteer } from '@/lib/firebase/applications';
+import type { ApplicationStatus } from '@/types/application';
 import Navbar from '@/components/Navbar';
 
 export default function CandidatesPage() {

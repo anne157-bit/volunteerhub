@@ -4,13 +4,14 @@
  * Provides utilities for role-based access control
  */
 
+import type { User as FirebaseUser } from 'firebase/auth';
 import type { User, Volunteer, NGO } from '@/types/user';
 import { isVolunteer, isNGO } from '@/types/user';
 
 /**
  * Check if user is authenticated and has a complete profile
  */
-export function requireAuth(user: User | null, profile: Volunteer | NGO | null): boolean {
+export function requireAuth(user: FirebaseUser | null, profile: Volunteer | NGO | null): boolean {
   return !!user && !!profile;
 }
 
@@ -18,7 +19,7 @@ export function requireAuth(user: User | null, profile: Volunteer | NGO | null):
  * Check if user is a volunteer
  */
 export function requireVolunteer(
-  user: User | null,
+  user: FirebaseUser | null,
   profile: Volunteer | NGO | null
 ): profile is Volunteer {
   return !!user && !!profile && isVolunteer(profile as User);
@@ -28,7 +29,7 @@ export function requireVolunteer(
  * Check if user is an NGO
  */
 export function requireNGO(
-  user: User | null,
+  user: FirebaseUser | null,
   profile: Volunteer | NGO | null
 ): profile is NGO {
   return !!user && !!profile && isNGO(profile as User);

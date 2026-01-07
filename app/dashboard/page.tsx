@@ -78,7 +78,7 @@ export default function DashboardPage() {
               Events Completed
             </h2>
             <p className="text-3xl font-bold text-green-600">
-              {profile.stats.eventsCompleted}
+              {profile.stats.eventsCompleted ?? 0}
             </p>
           </div>
 
@@ -87,7 +87,7 @@ export default function DashboardPage() {
               Current Streak
             </h2>
             <p className="text-3xl font-bold text-purple-600">
-              {profile.stats.currentStreak} days
+              {profile.stats.currentStreak ?? 0} days
             </p>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function DashboardPage() {
                         {application.opportunity.title}
                       </h3>
                       <p className="text-sm text-gray-700 mt-1">
-                        {application.opportunity.organizationName}
+                        {application.opportunity.ngoName}
                       </p>
                       <div className="mt-2">
                         <span
@@ -156,13 +156,13 @@ export default function DashboardPage() {
             </p>
             <p>
               <span className="font-medium">Skills:</span>{' '}
-              {Array.isArray(profile.skills) && profile.skills.length > 0
+              {profile.skills && profile.skills.length > 0
                 ? profile.skills.join(', ')
                 : 'Not specified'}
             </p>
             <p>
               <span className="font-medium">Causes:</span>{' '}
-              {Array.isArray(profile.causes) && profile.causes.length > 0
+              {profile.causes && profile.causes.length > 0
                 ? profile.causes.join(', ')
                 : 'Not specified'}
             </p>

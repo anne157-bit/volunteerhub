@@ -243,10 +243,8 @@ export default function CreateOpportunityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <div className="py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
         <div className="bg-white shadow rounded-lg p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">
             Create New Opportunity
@@ -420,7 +418,7 @@ export default function CreateOpportunityPage() {
                           type="text"
                           id="location.city"
                           name="location.city"
-                          required={formData.location.type !== 'remote'}
+                          required
                           value={formData.location.city}
                           onChange={handleInputChange}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -434,7 +432,7 @@ export default function CreateOpportunityPage() {
                           type="text"
                           id="location.state"
                           name="location.state"
-                          required={formData.location.type !== 'remote'}
+                          required
                           value={formData.location.state}
                           onChange={handleInputChange}
                           className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
@@ -616,7 +614,6 @@ export default function CreateOpportunityPage() {
               </button>
             </div>
           </form>
-        </div>
         </div>
       </div>
     </div>
