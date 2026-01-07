@@ -16,12 +16,12 @@ export default function LoginPage() {
 
   // Handle role-based redirects after authentication
   useEffect(() => {
-    if (!loading && user && profileComplete && profile && !hasRedirected) {
+    if (!Boolean(loading) && Boolean(user) && Boolean(profileComplete) && Boolean(profile) && !Boolean(hasRedirected)) {
       setHasRedirected(true);
       
-      if (isNGO) {
+      if (Boolean(isNGO)) {
         router.push('/ngo/dashboard');
-      } else if (isVolunteer) {
+      } else if (Boolean(isVolunteer)) {
         router.push('/dashboard');
       } else {
         // Fallback for missing profile type - redirect to onboarding
@@ -43,6 +43,8 @@ export default function LoginPage() {
       setIsSubmitting(false);
     }
   };
+
+  const isDisabled = Boolean(isSubmitting) || Boolean(loading) || (Boolean(user) && !Boolean(hasRedirected));
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -109,16 +111,18 @@ export default function LoginPage() {
 
           <div>
             <button
-              type="submit"
-              disabled={isSubmitting || loading || (user && !hasRedirected)}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            type="submit"
+            disabled={isDisabled}
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Signing in...' : (user && !hasRedirected) ? 'Redirecting...' : 'Sign in'}
+              {Boolean(isSubmitting)
+              ? 'Signing in...'
+              : Boolean(user) && !Boolean(hasRedirected)
+              ? 'Redirecting...'
+              : 'Sign in'}
             </button>
           </div>
-        </form>
-      </div>
-    </div>
+
   );
 }
 
