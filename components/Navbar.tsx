@@ -1,96 +1,123 @@
-'use client';
+"use client"; // ADDED: Required for useState and interactions
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { logout } from '@/lib/firebase/auth';
-import { useAuth } from '@/lib/hooks/useAuth';
+import Link from "next/link";
+import { useState } from "react";
+
+// Placeholder for your Firebase Auth hook
+// Replace this with your actual useAuth import later
+const useAuth = () => ({ user: null, signOut: () => console.log("Sign out") });
 
 export default function Navbar() {
-  const router = useRouter();
-  const { user, profile, loading, isVolunteer, isNGO } = useAuth();
-  const [isSigningOut, setIsSigningOut] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const { user, signOut } = useAuth(); // Mocking the user state
 
-  const handleSignOut = async () => {
-    setError(null);
-    setIsSigningOut(true);
-
-    try {
-      await logout();
-      router.push('/auth/login');
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to sign out');
-      console.error('Sign out error:', err);
-    } finally {
-      setIsSigningOut(false);
-    }
-  };
-
-  // Don't render navbar if no user is authenticated or still loading
-  if (!user || loading) {
-    return null;
-  }
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Opportunities", href: "/opportunities" },
+    ...(user ? [{ name: "Dashboard", href: "/dashboard" }] : []),
+  ];
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="text-xl font-semibold text-gray-900">
+    <nav className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md shadow-sm">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 justify-between items-center">
+          
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link href="/" className="text-2xl font-bold text-blue-600">
               VolunteerHub
             </Link>
           </div>
 
-          <div className="flex items-center space-x-4">
-            {isNGO && (
+          {/* Desktop Links */}
+          <div className="hidden md:flex md:items-center md:space-x-8">
+            {navLinks.map((link) => (
               <Link
-                href="/ngo/dashboard"
-                className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+                key={link.name}
+                href={link.href}
+                className="text-gray-600 hover:text-blue-600 transition-colors font-medium"
               >
-                NGO Dashboard
+                {link.name}
               </Link>
-            )}
-            {isVolunteer && (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Volunteer Dashboard
-                </Link>
-                <Link
-                  href="/volunteer/opportunities"
-                  className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Find Opportunities
-                </Link>
-              </>
-            )}
-            {profile && (
-              <span className="text-sm text-gray-700">
-                Welcome, {profile.name}
-              </span>
-            )}
+            ))}
+            
+            <div className="flex items-center space-x-4 ml-4 border-l pl-4">
+              {user ? (
+                <>
+                  <Link href="/profile" className="text-gray-600 hover:text-blue-600">Profile</Link>
+                  <button 
+                    onClick={() => signOut()}
+                    className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="text-gray-600 hover:text-blue-600">Login</Link>
+                  <Link 
+                    href="/signup" 
+                    className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
 
+          {/* Mobile menu button */}
+          <div className="flex md:hidden">
             <button
-              type="button"
-              onClick={handleSignOut}
-              disabled={isSigningOut}
-              className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
             >
-              {isSigningOut ? 'Signing out...' : 'Sign out'}
+              <span className="sr-only">Open main menu</span>
+              {isOpen ? (
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
       </div>
 
-      {error && (
-        <div className="bg-red-50 border-l-4 border-red-400 p-4">
-          <div className="flex">
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-white border-b border-gray-200">
+          <div className="space-y-1 px-2 pb-3 pt-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-blue-600"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <hr className="my-2 border-gray-100" />
+            {user ? (
+              <button
+                onClick={() => { signOut(); setIsOpen(false); }}
+                className="block w-full text-left rounded-md px-3 py-2 text-base font-medium text-red-600 hover:bg-red-50"
+              >
+                Sign Out
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="block rounded-md px-3 py-2 text-base font-medium text-blue-600 hover:bg-blue-50"
+                onClick={() => setIsOpen(false)}
+              >
+                Login / Sign Up
+              </Link>
+            )}
           </div>
         </div>
       )}
